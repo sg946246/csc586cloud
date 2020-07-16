@@ -14,7 +14,7 @@ node.addService(rspec.EXecute(Shell="/bin/sh",
 node.addService(rspec.EXecute(Shell="/bin/sh",
                               command="sudo apt install -y apache2"))
 node.addService(rspec.EXecute(Shell="/bin/sh",
-                              command='sudo suwf allow in "Apache Full"'))
+                              command='sudo uwf allow in "Apache Full"'))
 node.addService(rspec.EXecute(Shell="/bin/sh",
                               command='sudo systemctl status apache2'))
 # Print the RSpec to the enclosing page.
