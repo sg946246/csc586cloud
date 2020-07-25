@@ -1,21 +1,44 @@
-
+# Import the Portal object.
 import geni.portal as portal
-import geni.rspec.pg as rspec
+# Import the ProtoGENI library.
+import geni.rspec.pg as pg
+# Import the Emulab specific extensions.
+import geni.rspec.emulab as emulab
 
-#Create a Request object to start building the RSpec.
-request = portal.context.makeRequestRSpec()
-# Create a XenVM
-node = request.XenVM("node")
-node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
-node.routable_control_ip = "true"
+# Create a portal object,
+pc = portal.Context()
 
-node.addService(rspec.Execute(shell="/bin/sh",
+# Create a Request object to start building the RSpec.
+request = pc.makeRequestRSpec()
+
+link = request.LAN("lan")
+
+for i in range(2):
+  if i == 0:
+    node = request.XenVM('webserver')
+    node.routable_control_ip = "true"
+    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
+    node.addService(rspec.Execute(shell="/bin/sh",
                               command="sudo apt update"))
-node.addService(rspec.Execute(shell="/bin/sh",
+    node.addService(rspec.Execute(shell="/bin/sh",
                               command="sudo apt install -y apache2"))
-node.addService(rspec.Execute(shell="/bin/sh",
+    node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo ufw allow in "Apache Full"'))
-node.addService(rspec.Execute(shell="/bin/sh",
+    node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo systemctl status apache2'))
+    iface = node.addInterface("if" + str(i))
+    iface.component_id = "eth1"
+    iface.addAddress(pg.IPv4Address("192.168.1.1", "255.255.255.0"))
+    link.addInterface(iface)
+  else:
+    node = request.XenVM("observer")
+    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
+    iface = node.addInterface("if" + str(i))
+    iface.component_id = "eth1"
+    link.addInterface(iface)
+
+# Print the generated rspec
+pc.printRequestRSpec(request)
+
 # Print the RSpec to the enclosing page.
 portal.context.printRequestRSpec()
