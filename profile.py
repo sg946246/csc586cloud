@@ -1,7 +1,7 @@
 # Import the Portal object.
 import geni.portal as portal
 # Import the ProtoGENI library.
-import geni.rspec.pg as pg
+import geni.rspec.pg as rspec
 # Import the Emulab specific extensions.
 import geni.rspec.emulab as emulab
 
@@ -28,7 +28,7 @@ for i in range(2):
                               command='sudo systemctl status apache2'))
     iface = node.addInterface("if" + str(i))
     iface.component_id = "eth1"
-    iface.addAddress(pg.IPv4Address("192.168.1.1", "255.255.255.0"))
+    iface.addAddress(rspec.IPv4Address("192.168.1.1", "255.255.255.0"))
     link.addInterface(iface)
   else:
     node = request.XenVM("observer")
@@ -39,6 +39,3 @@ for i in range(2):
 
 # Print the generated rspec
 pc.printRequestRSpec(request)
-
-# Print the RSpec to the enclosing page.
-portal.context.printRequestRSpec()
