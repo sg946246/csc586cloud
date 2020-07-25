@@ -11,13 +11,13 @@ pc = portal.Context()
 # Create a Request object to start building the RSpec.
 request = pc.makeRequestRSpec()
 
+prefixForIP = "192.168.1."
 link = request.LAN("lan")
 
 for i in range(2):
   if i == 0:
-    node = request.XenVM('webserver')
+    node = request.XenVM("webserver")
     node.routable_control_ip = "true"
-    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     node.addService(rspec.Execute(shell="/bin/sh",
                               command="sudo apt update"))
     node.addService(rspec.Execute(shell="/bin/sh",
@@ -26,16 +26,13 @@ for i in range(2):
                               command='sudo ufw allow in "Apache Full"'))
     node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo systemctl status apache2'))
-    iface = node.addInterface("if" + str(i))
-    iface.component_id = "eth1"
-    iface.addAddress(rspec.IPv4Address("192.168.1.1", "255.255.255.0"))
-    link.addInterface(iface)
   else:
     node = request.XenVM("observer")
+    
     node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     iface = node.addInterface("if" + str(i))
     iface.component_id = "eth1"
-    iface.addAddress(rspec.IPv4Address("192.168.1.2", "255.255.255.0"))
+    iface.addAddress(rspec.IPv4Address(prefixForIP + str(i + 1), "255.255.255.0"))
     link.addInterface(iface)
 
 # Print the generated rspec
