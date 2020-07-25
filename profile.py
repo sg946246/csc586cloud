@@ -35,7 +35,7 @@ for i in range(2):
     node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     iface = node.addInterface("if" + str(i))
     iface.component_id = "eth1"
-    iface.addAddress(rspec.IPv4Address("192.168.1.2", "255.255.255.0")
+    iface.addAddress(rspec.IPv4Address("192.168.1.2", "255.255.255.0"))
     link.addInterface(iface)
 
 # Print the generated rspec
