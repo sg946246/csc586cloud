@@ -28,6 +28,13 @@ for i in range(2):
                               command='sudo systemctl status apache2'))
     node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo mkdir -p /var/webserver_log'))
+    
+    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
+    iface = node.addInterface("if" + str(i))
+    iface.component_id = "eth1"
+    iface.addAddress(rspec.IPv4Address(prefixForIP + str(i + 1), "255.255.255.0"))
+    link.addInterface(iface)
+    
   else:
     node = request.XenVM("observer")
     node.addService(rspec.Execute(shell="/bin/sh",
@@ -40,8 +47,7 @@ for i in range(2):
                               command='sudo mkdir -p /var/webserver_monitor'))
     node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo chown nobody:nogroup /var/webserver_monitor'))
-    
-    
+   
     node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     iface = node.addInterface("if" + str(i))
     iface.component_id = "eth1"
