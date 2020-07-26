@@ -26,8 +26,21 @@ for i in range(2):
                               command='sudo ufw allow in "Apache Full"'))
     node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo systemctl status apache2'))
+    node.addService(rspec.Execute(shell="/bin/sh",
+                              command='sudo mkdir -p /var/webserver_log'))
   else:
     node = request.XenVM("observer")
+    node.addService(rspec.Execute(shell="/bin/sh",
+                              command="sudo apt update"))
+    node.addService(rspec.Execute(shell="/bin/sh",
+                              command="sudo apt-get install nfs-kernel-server"))
+    node.addService(rspec.Execute(shell="/bin/sh",
+                              command='sudo apt-get install nfs-common"'))
+    node.addService(rspec.Execute(shell="/bin/sh",
+                              command='sudo mkdir -p /var/webserver_monitor'))
+    node.addService(rspec.Execute(shell="/bin/sh",
+                              command='sudo chown nobody:nogroup /var/webserver_monitor'))
+    
     
     node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
     iface = node.addInterface("if" + str(i))
