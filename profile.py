@@ -38,11 +38,11 @@ for i in range(2):
                               command='sudo chown nobody:nogroup /var/webserver_monitor'))
    
   
-    node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
-    iface = node.addInterface("if" + str(i))
-    iface.component_id = "eth1"
-    iface.addAddress(rspec.IPv4Address(prefixForIP + str(i + 1), "255.255.255.0"))
-    link.addInterface(iface)
+  node.disk_image = "urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-STD"
+  iface = node.addInterface("if" + str(i))
+  iface.component_id = "eth1"
+  iface.addAddress(rspec.IPv4Address(prefixForIP + str(i + 1), "255.255.255.0"))
+  link.addInterface(iface)
 
 # Print the generated rspec
 pc.printRequestRSpec(request)
