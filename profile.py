@@ -31,6 +31,8 @@ for i in range(2):
   else:
     node = request.XenVM("observer")
     node.addService(rspec.Execute(shell="/bin/sh",
+                              command="sudo apt update"))
+    node.addService(rspec.Execute(shell="/bin/sh",
                               command="sudo apt-get install -y nfs-kernel-server"))
     node.addService(rspec.Execute(shell="/bin/sh",
                               command='sudo mkdir -p /var/webserver_monitor'))
